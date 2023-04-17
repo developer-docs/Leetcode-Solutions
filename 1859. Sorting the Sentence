@@ -1,0 +1,26 @@
+class Solution {
+    public String sortSentence(String s) {
+      String words[] = s.split(" ");
+		
+			Map<Integer,String> map = new LinkedHashMap<Integer,String>();
+			for(int i = 0 ; i < words.length ; i++) {
+				int len = words[i].length();
+				int num = Integer.parseInt(String.valueOf(words[i].charAt(len-1)));
+				map.put(num , words[i].substring(0, len - 1));
+			}
+			
+			String result[] = new String[words.length];
+			for(Map.Entry<Integer, String> entry : map.entrySet()) {
+				int index = entry.getKey();
+				result[index - 1] = entry.getValue();
+			}
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0; i < result.length ; i++) {
+				sb.append(result[i]);
+				if(i != result.length - 1) {
+					sb.append(" ");
+				}
+			}
+			return sb.toString(); 
+    }
+}
