@@ -1,0 +1,14 @@
+class Solution {
+    public List<String> splitWordsBySeparator(List<String> words, char separator) {
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < words.size(); i++) {
+            String wordsArray[] = words.get(i).split("["+separator+"]");
+            for (String word : wordsArray) {
+                if (word != "") {
+                    result.add(word);
+                }
+            }
+        }
+        return result;
+    }
+}
