@@ -1,0 +1,15 @@
+class Solution {
+    public int prefixCount(String[] words, String pref) {
+        int pref_len = pref.length();
+        int count = 0;
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].length() >= pref_len) {
+                String checkPrefix = words[i].substring(0, pref_len);
+                if (pref.equals(checkPrefix)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
