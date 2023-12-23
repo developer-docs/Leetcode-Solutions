@@ -1,0 +1,47 @@
+class Solution {
+    public int maxProductDifference(int[] nums) {
+        Arrays.sort(nums);
+        int a = nums[nums.length - 1];
+        int b = nums[nums.length - 2];
+        int c = nums[0];
+        int d = nums[1];
+        int maxProduct = (a * b) - (c * d);
+        return maxProduct;
+    }
+}
+
+--- METHOD 2 ---
+
+class Solution {
+    public int maxProductDifference(int[] nums) {
+        int biggest = Integer.MIN_VALUE, secondBiggest = Integer.MIN_VALUE;
+        int smallest = Integer.MAX_VALUE, secondSmallest = Integer.MAX_VALUE;
+        for (int num : nums) {
+            if (num > biggest) {
+                secondBiggest = biggest;
+                biggest = num;
+            } 
+            else { // If num <= biggest, check num's relation with secondBiggest
+                if (secondBiggest < num) {
+                    secondBiggest = num;
+                }
+                else {
+                    secondBiggest = secondBiggest;
+                }
+            }
+            if (num < smallest) {
+                secondSmallest = smallest;
+                smallest = num;
+            } 
+            else { // If num >= smallest, check num's relation with secondSmallest
+                if (secondSmallest > num) {
+                    secondSmallest = num;
+                }
+                else {
+                    secondSmallest = secondSmallest;
+                }
+            }
+        }
+        return (biggest * secondBiggest) - (smallest * secondSmallest);
+    }
+}
