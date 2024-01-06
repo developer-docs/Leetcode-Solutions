@@ -1,0 +1,52 @@
+class Solution {
+    int[] memo = new int[50001];
+    public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+        List<List<Integer>> jobs = new ArrayList<>();
+        Arrays.fill(memo, -1);
+        int len = startTime.length;
+        for (int i = 0; i < len; i++) {
+            List<Integer> currJob = new ArrayList<>();
+            currJob.add(startTime[i]);
+            currJob.add(endTime[i]);
+            currJob.add(profit[i]);
+            jobs.add(currJob);
+        }
+        jobs.sort(Comparator.comparingInt(a -> a.get(0)));
+        for (int i = 0; i < len; i++) {
+            startTime[i] = jobs.get(i).get(0);
+        }
+        return findMaxProfit(jobs, startTime, len, 0);
+    }
+    private int findMaxProfit(List<List<Integer>> jobs, int[] startTime, int n, int position) {
+        if (position == n) {
+            return 0;
+        }
+        if (memo[position] != -1) {
+            return memo[position];
+        }
+        int currJobEndTime = jobs.get(position).get(1);
+        int nextIndex = findNextJobsIndex(startTime, currJobEndTime);
+
+        int maxProfit = Math.max(findMaxProfit(jobs, startTime, n, position + 1),
+                                findMaxProfit(jobs, startTime, n, nextIndex) + jobs.get(position).get(2));
+
+        memo[position] = maxProfit;
+        return maxProfit;
+    }
+    private int findNextJobsIndex(int[] startTime, int lastEndingTime) {
+        int start = 0;
+        int end = startTime.length - 1;
+        int nextIndex = startTime.length;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            if (startTime[mid] >= lastEndingTime) {
+                nextIndex = mid;
+                end = mid - 1;
+            }
+            else {
+                start = mid + 1;
+            }
+        }
+        return nextIndex;
+    }
+}
