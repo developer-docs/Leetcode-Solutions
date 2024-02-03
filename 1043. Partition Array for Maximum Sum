@@ -1,0 +1,42 @@
+//Method 1 - Top Down
+class Solution {
+    int[] dp;
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        dp = new int[arr.length];
+        Arrays.fill(dp, -1);
+        return helper(arr, k, 0);
+    }
+    private int helper(int[] arr, int k, int start) {
+        int len = arr.length;
+        if (start >= len) {
+            return 0;
+        }
+        if (dp[start] != -1) {
+            return dp[start];
+        }
+        int currMax = 0, ans = 0;
+        int end = Math.min(len, start + k);
+        for (int i = start; i < end; i++) {
+            currMax = Math.max(currMax, arr[i]);
+            ans = Math.max(ans, currMax * (i - start + 1) + helper(arr, k, i + 1));
+        }
+        return dp[start] = ans;
+    }
+}
+
+//Method 2 - Bottom up
+class Solution {
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int[] dp = new int[arr.length + 1];
+        Arrays.fill(dp, 0);
+        for (int start = arr.length - 1; start >= 0; start--) {
+            int currMax = 0;
+            int end = Math.min(arr.length, start + k);
+            for (int i = start; i < end; i++) {
+                currMax = Math.max(currMax, arr[i]);
+                dp[start] = Math.max(dp[start], currMax * (i - start + 1) + dp[i + 1]);
+            }
+        }
+        return dp[0];
+    }
+}
