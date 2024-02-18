@@ -1,0 +1,38 @@
+class Solution {
+    public int mostBooked(int n, int[][] meetings) {
+        long[] roomAvailabilityTime = new long[n];
+        int[] meetingCount = new int[n];
+        Arrays.sort(meetings, (a, b) -> a[0] - b[0]);
+        for (int[] meeting : meetings) {
+            int startTime = meeting[0];
+            int endTime = meeting[1];
+            boolean foundUnusedRoom = false;
+            int minAvailableTimeRoom = 0;
+            long minRoomAvailabilityTime = Long.MAX_VALUE;
+            for (int i = 0; i < n; i++) {
+                if (roomAvailabilityTime[i] <= startTime) {
+                    foundUnusedRoom = true;
+                    meetingCount[i]++;
+                    roomAvailabilityTime[i] = endTime;
+                    break;
+                }
+                if (minRoomAvailabilityTime > roomAvailabilityTime[i]) {
+                    minRoomAvailabilityTime = roomAvailabilityTime[i];
+                    minAvailableTimeRoom = i;
+                }
+            }
+            if (!foundUnusedRoom) {
+                roomAvailabilityTime[minAvailableTimeRoom] += endTime - startTime;
+                meetingCount[minAvailableTimeRoom]++;
+            }
+        }
+        int maxMeetingCount = 0, maxMeetingCountRoom = 0;
+        for (int i = 0; i < n; i++) {
+            if (meetingCount[i] > maxMeetingCount) {
+                maxMeetingCount = meetingCount[i];
+                maxMeetingCountRoom = i;
+            }
+        }
+        return maxMeetingCountRoom;
+    }
+}
