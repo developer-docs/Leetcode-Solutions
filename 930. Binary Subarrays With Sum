@@ -1,0 +1,43 @@
+//Prefix Sum : SC - O(n)
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+            if (sum == goal){
+                count++;
+            }
+            if (map.containsKey(sum - goal)){
+                count += map.get(sum - goal);
+            }
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+        return count;
+    }
+}
+
+//Sliding Window : SC - O(1)
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        return helper(nums, goal) - helper(nums, goal - 1);
+    }
+    public int helper(int nums[],int goal) {
+        if (goal < 0) {
+            return 0;
+        }
+        int count = 0, sum = 0;
+        int start = 0, end = 0;
+        while (start < nums.length) {
+            sum += nums[start]; 
+            while (end < nums.length && sum > goal) {
+                sum -= nums[end];
+                end++;
+            }
+            count += start - end + 1;
+            start++;
+        }
+        return count;
+    }
+}
